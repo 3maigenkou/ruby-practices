@@ -6,23 +6,22 @@ require 'optparse'
 params = ARGV.getopts("y:", "m:")
 today = Date.today
 year =
-if params["y"]
+  if params["y"]
     params["y"].to_i
-else
-  today.year
-end
+  else
+    today.year
+  end
 
 month =
-if params["m"]
+  if params["m"]
     params["m"].to_i
-else
-  today.mon
-end
+  else
+    today.mon
+  end
 
-
-title = month.to_s + "月 " + year.to_s
-firstday_wday = Date.new(year,month,1).wday
-lastday_date = Date.new(year,month,-1).day
+title = "#{month.to_s}月 #{year.to_s}"
+firstday_wday = Date.new(year, month, 1).wday
+lastday_date = Date.new(year, month, -1).day
 week = "日 月 火 水 木 金 土"
 
 puts title.center(20)
