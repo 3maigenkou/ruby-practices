@@ -5,11 +5,11 @@ score = ARGV[0]
 scores = score.split(',')
 shots = []
 scores.each do |s|
-  case shots
-  when s == 'X'
+  case s
+  when 'X'
     shots << 10
     shots << 0
-  when s == 'G'
+  when 'G'
     shots << 0
   else
     shots << s.to_i
