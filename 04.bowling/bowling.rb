@@ -4,22 +4,21 @@
 score = ARGV[0]
 scores = score.split(',')
 shots = []
+STRIKE = 'X'
+GUTTER = 'G'
 scores.each do |s|
   case s
-  when 'X'
+  when STRIKE
     shots << 10
     shots << 0
-  when 'G'
+  when GUTTER
     shots << 0
   else
     shots << s.to_i
   end
 end
 
-frames = []
-shots.each_slice(2) do |s|
-  frames << s
-end
+frames = shots.each_slice(2).to_a
 
 point = 0
 frames[0..8].each_with_index do |frame, i|
