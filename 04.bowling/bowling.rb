@@ -4,15 +4,15 @@
 score = ARGV[0]
 scores = score.split(',')
 shots = []
-STRIKE = 'X'
-GUTTER = 'G'
+STRIKE_POINT = 10
+GUTTER_POINT = 0
 scores.each do |s|
   case s
-  when STRIKE
-    shots << 10
+  when "X"
+    shots << STRIKE_POINT
     shots << 0
-  when GUTTER
-    shots << 0
+  when "G"
+    shots << GUTTER_POINT
   else
     shots << s.to_i
   end
