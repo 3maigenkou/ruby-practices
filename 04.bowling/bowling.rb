@@ -5,7 +5,9 @@ score = ARGV[0]
 scores = score.split(',')
 shots = []
 STRIKE_POINT = 10
+SPARE_POINT = 10
 GUTTER_POINT = 0
+
 scores.each do |s|
   case s
   when "X"
@@ -22,12 +24,12 @@ frames = shots.each_slice(2).to_a
 
 point = 0
 frames[0..8].each_with_index do |frame, i|
-  if frame == [10, 0] && frames[i + 1][0] == 10
-    point += frames[i + 2][0] + 20
+  if frame == [10, 0] && frames[i + 1][0] == STRIKE_POINT
+    point += frames[i + 2][0] + STRIKE_POINT*2
   elsif frame == [10, 0]
-    point += frames[i + 1][0] + frames[i + 1][1] + 10
-  elsif frame.sum == 10 && frame != [10, 0]
-    point += frames[i + 1][0] + 10
+    point += frames[i + 1][0] + frames[i + 1][1] + STRIKE_POINT
+  elsif frame.sum == SPARE_POINT && frame != [10, 0]
+    point += frames[i + 1][0] + SPARE_POINT
   else
     point += frame.sum
   end
