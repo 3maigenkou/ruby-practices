@@ -11,56 +11,79 @@ end
 
 def output_wc(input_str)
   if File.exist?(input_str[0])
-    input_str.each_with_index do |_, i|
-      line = lines_point(input_str)[i].to_s.rjust(8)
-      word = words_point(input_str)[i].to_s.rjust(8)
-      bytesize = bytesize_point(input_str)[i].to_s.rjust(8)
-      name = file_name(input_str)[i]
-      puts "#{line}#{word}#{bytesize} #{name}"
-    end
+    output_point(input_str)
     return unless input_str.size > 1
 
-    total_lines = lines_point(input_str).sum.to_s.rjust(8)
-    total_words = words_point(input_str).sum.to_s.rjust(8)
-    total_bytsizes = bytesize_point(input_str).sum.to_s.rjust(8)
-    puts "#{total_lines}#{total_words}#{total_bytsizes} total\n"
+    total_lines_point(input_str)
+    total_words_point(input_str)
+    total_bytesize_point(input_str)
+    print " total\n"
 
   else
-    puts "wc: #{input_str}: open: No such file or directory"
+    total_lines_point_nofile(input_str)
+    total_words_point_nofile(input_str)
+    total_bytesize_point_nofile(input_str)
+    print "\n"
   end
 end
 
 def output_wc_l(input_str)
   if File.exist?(input_str[0])
-    input_str.each_with_index do |_, i|
-      line = lines_point(input_str)[i].to_s.rjust(8)
-      name = file_name(input_str)[i]
-      puts "#{line} #{name}"
-    end
+    output_point(input_str)
     return unless input_str.size > 1
 
-    total_lines = lines_point(input_str).sum.to_s.rjust(8)
-    puts "#{total_lines} total\n"
+    total_lines_point(input_str)
+    print " total\n"
 
   else
-    puts "wc: #{input_str}: open: No such file or directory"
+    total_lines_point_nofile(input_str)
+    print "\n"
   end
 end
 
-def lines_point(input_str)
-  input_str.map { |a| File.read(a).count("\n") }
+def output_point(input_str)
+  options = ARGV.getopts('l')
+  input_str.each do |a|
+    file = File.read(a)
+    file_lines = file.count("\n").to_s.rjust(8)
+    words = file.split(/\s+/).size.to_s.rjust(7)
+    bytesize = file.bytesize.to_s.rjust(7)
+    name = File.basename(a)
+    if options
+      puts "#{file_lines} #{name}"
+    else
+      puts "#{file_lines} #{words} #{bytesize} #{name}"
+    end
+  end
 end
 
-def words_point(input_str)
-  input_str.map { |a| File.read(a).split(/\s+/).size }
+def total_lines_point(input_str)
+  total_file_lines = input_str.sum { |a| File.read(a).count("\n") }
+  print total_file_lines.to_s.rjust(8)
 end
 
-def bytesize_point(input_str)
-  input_str.map { |a| File.read(a).bytesize }
+def total_words_point(input_str)
+  total_file_words = input_str.sum { |a| File.read(a).split(/\s+/).size }
+  print total_file_words.to_s.rjust(8)
 end
 
-def file_name(input_str)
-  input_str.map { |a| File.basename(a) }
+def total_bytesize_point(input_str)
+  total_file_bytesize = input_str.sum { |a| File.read(a).bytesize }
+  print total_file_bytesize.to_s.rjust(8)
+end
+
+def total_lines_point_nofile(input_str)
+  print input_str.size.to_s.rjust(8)
+end
+
+def total_words_point_nofile(input_str)
+  total_file_words_nofile = input_str.sum { |a| a.split(/\s+/).size }
+  print total_file_words_nofile.to_s.rjust(8)
+end
+
+def total_bytesize_point_nofile(input_str)
+  total_file_bytesize_nofile = input_str.sum(&:bytesize)
+  print total_file_bytesize_nofile.to_s.rjust(8)
 end
 
 main
