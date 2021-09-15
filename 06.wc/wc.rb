@@ -49,7 +49,7 @@ def output_point(input_str)
     words = file.split(/\s+/).size.to_s.rjust(7)
     bytesize = file.bytesize.to_s.rjust(7)
     name = File.basename(a)
-    if options
+    if options['l']
       puts "#{file_lines} #{name}"
     else
       puts "#{file_lines} #{words} #{bytesize} #{name}"
