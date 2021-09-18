@@ -6,43 +6,33 @@ require 'optparse'
 def main
   options = ARGV.getopts('l')
   input_str = ARGV.empty? ? $stdin.readlines.map(&:chomp) : ARGV
-  options['l'] ? output_wc_l(input_str) : output_wc(input_str)
+  output_wc(input_str, options)
 end
 
-def output_wc(input_str)
+def output_wc(input_str, options)
   if File.exist?(input_str[0])
-    output_point(input_str)
+    output_point(input_str, options)
+
     return unless input_str.size > 1
 
     total_lines_point(input_str)
-    total_words_point(input_str)
-    total_bytesize_point(input_str)
+    unless options['l']
+      total_words_point(input_str)
+      total_bytesize_point(input_str)
+    end
     print " total\n"
 
   else
     total_lines_point_nofile(input_str)
-    total_words_point_nofile(input_str)
-    total_bytesize_point_nofile(input_str)
+    unless options['l']
+      total_words_point_nofile(input_str)
+      total_bytesize_point_nofile(input_str)
+    end
     print "\n"
   end
 end
 
-def output_wc_l(input_str)
-  if File.exist?(input_str[0])
-    output_point(input_str)
-    return unless input_str.size > 1
-
-    total_lines_point(input_str)
-    print " total\n"
-
-  else
-    total_lines_point_nofile(input_str)
-    print "\n"
-  end
-end
-
-def output_point(file_names)
-  options = ARGV.getopts('l')
+def output_point(file_names, options)
   file_names.each do |a|
     file = File.read(a)
     file_lines = file.count("\n").to_s.rjust(8)
