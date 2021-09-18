@@ -41,9 +41,9 @@ def output_wc_l(input_str)
   end
 end
 
-def output_point(input_str)
+def output_point(file_names)
   options = ARGV.getopts('l')
-  input_str.each do |a|
+  file_names.each do |a|
     file = File.read(a)
     file_lines = file.count("\n").to_s.rjust(8)
     words = file.split(/\s+/).size.to_s.rjust(7)
@@ -57,18 +57,18 @@ def output_point(input_str)
   end
 end
 
-def total_lines_point(input_str)
-  total_file_lines = input_str.sum { |a| File.read(a).count("\n") }
+def total_lines_point(file_names)
+  total_file_lines = file_names.sum { |a| File.read(a).count("\n") }
   print total_file_lines.to_s.rjust(8)
 end
 
-def total_words_point(input_str)
-  total_file_words = input_str.sum { |a| File.read(a).split(/\s+/).size }
+def total_words_point(file_names)
+  total_file_words = file_names.sum { |a| File.read(a).split(/\s+/).size }
   print total_file_words.to_s.rjust(8)
 end
 
-def total_bytesize_point(input_str)
-  total_file_bytesize = input_str.sum { |a| File.read(a).bytesize }
+def total_bytesize_point(file_names)
+  total_file_bytesize = file_names.sum { |a| File.read(a).bytesize }
   print total_file_bytesize.to_s.rjust(8)
 end
 
