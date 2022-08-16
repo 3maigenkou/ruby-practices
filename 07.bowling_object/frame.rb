@@ -1,4 +1,6 @@
-require "./shot"
+# frozen_string_literal: true
+
+require './shot'
 
 class Frame
   def initialize(first_mark, second_mark, third_mark = nil)
@@ -12,11 +14,11 @@ class Frame
   end
 
   def spare?
-    [@first_shot.score,@second_shot.score].sum == 10 && @first_shot != "X"
+    [@first_shot.score, @second_shot.score].sum == 10 && @first_shot != 'X'
   end
 
   def score
-   [@first_shot.score,@second_shot.score,@third_shot.score].sum
+    [@first_shot.score, @second_shot.score, @third_shot.score].sum
   end
 
   def strike_point
@@ -28,7 +30,7 @@ class Frame
   end
 
   def double_strike_bonus
-    @first_shot.score + strike_point*2
+    @first_shot.score + strike_point * 2
   end
 
   def strike_bonus
