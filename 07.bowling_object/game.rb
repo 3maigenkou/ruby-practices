@@ -4,11 +4,10 @@ require './shot'
 require './frame'
 
 class Game
-  def initialize
-    marks = ARGV[0].split(',')
+  def initialize(marks)
     shot_count = 0
     frames = []
-    marks.each do |mark|
+    marks[0].split(',').each do |mark|
       frames << mark
       if shot_count < 18 && mark == 'X'
         frames << nil
@@ -17,7 +16,6 @@ class Game
         shot_count += 1
       end
     end
-
     @frame1 = Frame.new(frames[0], frames[1])
     @frame2 = Frame.new(frames[2], frames[3])
     @frame3 = Frame.new(frames[4], frames[5])
