@@ -4,5 +4,5 @@ require './shot'
 require './frame'
 require './game'
 
-game = Game.new(ARGV)
-game.score
+game = Game.new(ARGV[0])
+p game.score

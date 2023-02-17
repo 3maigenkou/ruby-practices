@@ -3,6 +3,8 @@
 require './shot'
 
 class Frame
+  STRIKE_POINT = 10
+
   def initialize(first_mark, second_mark, third_mark = nil)
     @first_shot = Shot.new(first_mark)
     @second_shot = Shot.new(second_mark)
@@ -14,30 +16,18 @@ class Frame
   end
 
   def spare?
-    [@first_shot.score, @second_shot.score].sum == 10 && @first_shot != 'X'
+    [@first_shot.score, @second_shot.score].sum == 10 && @first_shot.score != 10
   end
 
   def score
     [@first_shot.score, @second_shot.score, @third_shot.score].sum
   end
 
-  def strike_point
-    @strike_point = 10
+  def first_shot_score
+    @first_shot.score
   end
 
-  def spare_point
-    @spare_point = 10
-  end
-
-  def double_strike_bonus
-    @first_shot.score + strike_point * 2
-  end
-
-  def strike_bonus
-    @first_shot.score + @second_shot.score + strike_point
-  end
-
-  def spare_bonus
-    @first_shot.score + spare_point
+  def second_shot_score
+    @second_shot.score
   end
 end
