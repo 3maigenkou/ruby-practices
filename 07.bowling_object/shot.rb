@@ -5,8 +5,12 @@ class Shot
     @mark = mark
   end
 
-  def score
-    return 10 if @mark == 'X'
+  def strike?
+    @mark == 'X'
+  end
+
+  def shot_point
+    return 10 if strike?
 
     @mark.to_i
   end

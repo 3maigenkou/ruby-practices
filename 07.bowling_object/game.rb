@@ -1,17 +1,24 @@
 # frozen_string_literal: true
 
-require './shot'
-require './frame'
+require_relative 'frame'
 
 class Game
-  def initialize(marks)
-    @marks = marks
+  def score
+    non_bonus_point + strike_bonus_point + spare_bonus_point
   end
 
-  def split_marks
+  private
+
+  def initialize(marks)
+    @summary_shots = summary_shots(marks)
+    shots = split_marks(marks)
+    @frames = make_frames(shots)
+  end
+
+  def split_marks(marks)
     shot_count = 0
     shots = []
-    @marks.split(',').each do |mark|
+    marks.split(',').each do |mark|
       shots << mark
       if shot_count < 18 && mark == 'X'
         shots << nil
@@ -23,52 +30,51 @@ class Game
     shots
   end
 
-  def frames
-    shots_nomal_frames = split_marks[0..17].each_slice(2).to_a
-    shots_last_frames = [split_marks[18..20]]
-    total_shots = shots_nomal_frames.concat shots_last_frames
-    frames = []
-    total_shots.each do |shot|
-      frames << Frame.new(shot[0], shot[1], shot[2])
+  def summary_shots(marks)
+    marks.split(',').map do |mark|
+      Shot.new(mark)
     end
-    frames
   end
 
-  def spare_bonus_point
-    spare_bonus_point = 0
-    frames.each_with_index do |frame, idx|
-      next unless idx < 9
-
-      spare_bonus_point += frames[idx + 1].first_shot_score if frame.spare?
+  def make_frames(shots)
+    shots_nomal_frames = shots[0..17].each_slice(2).to_a
+    shots_last_frames = [shots[18..20]]
+    total_shots = shots_nomal_frames.concat shots_last_frames
+    total_shots.map do |shot|
+      Frame.new(shot[0], shot[1], shot[2])
     end
-    spare_bonus_point
   end
 
   def strike_bonus_point
     strike_bonus_point = 0
-    frames.each_with_index do |frame, idx|
-      next unless idx < 9
-
-      if idx == 8 && frame.strike?
-        strike_bonus_point += frames[idx + 1].first_shot_score + frames[idx + 1].second_shot_score
-      elsif frame.strike? && frames[idx + 1].strike?
-        strike_bonus_point += frames[idx + 2].first_shot_score + Frame::STRIKE_POINT
-      elsif frame.strike?
-        strike_bonus_point += frames[idx + 1].score
-      end
+    shot_times = @summary_shots.length
+    @summary_shots.each_with_index do |shot, idx|
+      strike_bonus_point += @summary_shots[idx + 1].shot_point + @summary_shots[idx + 2].shot_point if shot.strike? && idx <= shot_times - 3
     end
     strike_bonus_point
   end
 
-  def score_non_bonus
-    score_non_bonus = 0
-    frames.each do |frame|
-      score_non_bonus += frame.score
+  def spare_bonus_point
+    spare_bonus_point = 0
+    @frames.each_with_index do |frame, idx|
+      if idx == 9 && frame.spare?
+        spare_bonus_point += frame.third_shot_point
+      elsif frame.spare?
+        spare_bonus_point += @frames[idx + 1].first_shot_point
+      end
     end
-    score_non_bonus
+    spare_bonus_point
   end
 
-  def score
-    score_non_bonus + spare_bonus_point + strike_bonus_point
+  def non_bonus_point
+    non_bonus_point = 0
+    @frames.each_with_index do |frame, idx|
+      non_bonus_point += if idx == 9 && frame.spare? || frame.strike?
+                           10
+                         else
+                           frame.frame_point
+                         end
+    end
+    non_bonus_point
   end
 end
