@@ -17,7 +17,7 @@ class Frame
   end
 
   def spare?
-    [@first_shot.shot_point, @second_shot.shot_point].sum == STRIKE_POINT && !strike?
+    [@first_shot.shot_point, @second_shot.shot_point].sum == SPARE_POINT && !strike?
   end
 
   def frame_point
