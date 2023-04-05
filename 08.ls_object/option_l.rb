@@ -6,14 +6,18 @@ class OptionL
   end
 
   def output
-    total
+    p file_type1
   end
 
   def total
     @files_data.map(&:blocks).sum
   end
 
-  def self.file_type(file_type)
+  def file_type
+    @files_data.map(&:ftype).map(&:to_sym)
+  end
+
+  def convert_file_type(file_type)
     {
       fifo: 'p',
       characterSpecial: 'c',
@@ -25,7 +29,7 @@ class OptionL
     }[file_type]
   end
 
-  def self.permission(file_permission)
+  def convert_permission(file_permission)
     {
       "0": '---',
       "1": '--x',
