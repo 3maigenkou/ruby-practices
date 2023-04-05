@@ -2,4 +2,4 @@
 
 require_relative 'files_data'
 
-FilesData.output(ARGV)
+puts FilesData.output(ARGV)

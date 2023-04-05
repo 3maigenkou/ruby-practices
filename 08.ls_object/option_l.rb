@@ -1,6 +1,18 @@
 # frozen_string_literal: true
 
 class OptionL
+  def initialize(files_name)
+    @files_data = files_name.map { |data| File::Stat.new(data) }
+  end
+
+  def output
+    total
+  end
+
+  def total
+    @files_data.map(&:blocks).sum
+  end
+
   def self.file_type(file_type)
     {
       fifo: 'p',

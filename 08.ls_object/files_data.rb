@@ -11,16 +11,15 @@ class FilesData
   end
 
   def output(_options = nil)
-    @options['l'] ? display_option_l : display_except_option_l
+    @options['l'] ? OptionL.new(@files_name).output : display_except_option_l
   end
 
-  # private
+  private
 
   def initialize(_options = nil)
     @options = ARGV.getopts('a', 'r', 'l')
     @files_name = @options['a'] ? Dir.glob('*', File::FNM_DOTMATCH).sort : Dir.glob('*').sort
     @files_name = @files_name.reverse if @options['r']
-    @files_data = @files_name.map { |data| File::Stat.new(data) } if @options['l']
   end
 
   def adjust_display
@@ -30,12 +29,6 @@ class FilesData
   end
 
   def display_except_option_l
-    adjust_display.each { |row| puts row.join }
+    adjust_display.map(&:join)
   end
-
-  def display_option_l
-    p @files_data
-  end
-
-
 end
