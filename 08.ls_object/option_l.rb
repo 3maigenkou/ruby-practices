@@ -5,6 +5,10 @@ require 'etc'
 class OptionL
   def output
     puts "total #{total}"
+    each_data = total_data.transpose
+    each_data.each do |data|
+      puts "#{data[0]}#{data[1]}#{data[2]}#{data[3]}#{data[4]}#{data[5]}#{data[6]}#{data[7]}#{data[8]}#{data[9]}"
+    end
   end
 
   # private
@@ -21,7 +25,6 @@ class OptionL
   def total_data
     total_data = []
     total_data << files_type
-    total_data << file_mode
     total_data << file_permission_owner
     total_data << file_permission_group
     total_data << file_permission_other
