@@ -4,10 +4,10 @@ require 'etc'
 
 class OptionL
   def output
-    @files_name
+    puts "total #{total}"
   end
 
-# private
+  # private
 
   def initialize(files_name)
     @files_name = files_name
@@ -18,31 +18,46 @@ class OptionL
     @files_data.map(&:blocks).sum
   end
 
+  def total_data
+    total_data = []
+    total_data << files_type
+    total_data << file_mode
+    total_data << file_permission_owner
+    total_data << file_permission_group
+    total_data << file_permission_other
+    total_data << file_nlink
+    total_data << owner_name
+    total_data << group_name
+    total_data << file_size
+    total_data << time_stamp
+    total_data << file_name
+  end
+
   def files_type
     files_type = @files_data.map(&:ftype).map(&:to_sym)
     files_type.map { |file| convert_file_type(file) }
   end
 
   def file_mode
-    @files_data.map { |file| format('%o', file.mode)}
+    @files_data.map { |file| format('%o', file.mode) }
   end
 
   def file_permission_owner
-    owner_permission_number = file_mode.map { |mode|mode[-3] }
+    owner_permission_number = file_mode.map { |mode| mode[-3] }
     owner_permission_number_sym = owner_permission_number.map(&:to_sym)
-    owner_permission_number_sym.map {|number|convert_permission(number)}
+    owner_permission_number_sym.map { |number| convert_permission(number) }
   end
 
   def file_permission_group
-    group_permission_number = file_mode.map { |mode|mode[-2] }
+    group_permission_number = file_mode.map { |mode| mode[-2] }
     group_permission_number_sym = group_permission_number.map(&:to_sym)
-    group_permission_number_sym.map {|number|convert_permission(number)}
+    group_permission_number_sym.map { |number| convert_permission(number) }
   end
 
   def file_permission_other
-    other_permission_number = file_mode.map { |mode|mode[-1] }
+    other_permission_number = file_mode.map { |mode| mode[-1] }
     other_permission_number_sym = other_permission_number.map(&:to_sym)
-    other_permission_number_sym.map {|number|convert_permission(number)}
+    other_permission_number_sym.map { |number| convert_permission(number) }
   end
 
   def file_nlink
@@ -50,15 +65,19 @@ class OptionL
   end
 
   def owner_name
+    @files_data.map { |file| Etc.getpwuid(file.uid).name }
   end
 
   def group_name
+    @files_data.map { |file| Etc.getgrgid(file.gid).name }
   end
 
   def file_size
+    @files_data.map(&:size)
   end
 
   def time_stamp
+    @files_data.map { |file| file.mtime.strftime('%-m  %-d %R') }
   end
 
   def convert_file_type(file_type)
@@ -71,6 +90,10 @@ class OptionL
       link: 'l',
       socket: 's'
     }[file_type]
+  end
+
+  def file_name
+    @files_name
   end
 
   def convert_permission(file_permission)

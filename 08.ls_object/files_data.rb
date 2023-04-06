@@ -29,6 +29,6 @@ class FilesData
   end
 
   def display_except_option_l
-    adjust_display.map(&:join)
+    puts adjust_display.map(&:join)
   end
 end
