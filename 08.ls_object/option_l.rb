@@ -5,9 +5,8 @@ require 'etc'
 class OptionL
   def output
     puts "total #{total}"
-    each_data = total_data.transpose
-    each_data.each do |data|
-      puts "#{data[0]}#{data[1]}#{data[2]}#{data[3]}#{data[4]}#{data[5]}#{data[6]}#{data[7]}#{data[8]}#{data[9]}"
+    total_data.each do |data|
+      puts data[0..9].join
     end
   end
 
@@ -34,6 +33,7 @@ class OptionL
     total_data << file_size
     total_data << time_stamp
     total_data << file_name
+    total_data.transpose
   end
 
   def files_type
@@ -64,23 +64,29 @@ class OptionL
   end
 
   def file_nlink
-    @files_data.map(&:nlink)
+    @files_data.map(&:nlink).map { |data| data.to_s.rjust(3) }
   end
 
   def owner_name
-    @files_data.map { |file| Etc.getpwuid(file.uid).name }
+    @files_data.map { |file| Etc.getpwuid(file.uid).name.to_s.rjust(9) }
   end
 
   def group_name
-    @files_data.map { |file| Etc.getgrgid(file.gid).name }
+    @files_data.map { |file| Etc.getgrgid(file.gid).name.to_s.rjust(8) }
   end
 
   def file_size
-    @files_data.map(&:size)
+    @files_data.map(&:size).map { |data| data.to_s.rjust(6) }
   end
 
   def time_stamp
-    @files_data.map { |file| file.mtime.strftime('%-m  %-d %R') }
+    @files_data.map do |file|
+      [file.mtime.strftime('%-m').rjust(3), file.mtime.strftime('%-d').rjust(3), file.mtime.strftime('%R').rjust(6)]
+    end
+  end
+
+  def file_name
+    @files_name.map { |name| " #{name}" }
   end
 
   def convert_file_type(file_type)
@@ -93,10 +99,6 @@ class OptionL
       link: 'l',
       socket: 's'
     }[file_type]
-  end
-
-  def file_name
-    @files_name
   end
 
   def convert_permission(file_permission)
