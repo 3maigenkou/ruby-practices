@@ -86,7 +86,7 @@ class OptionL
   end
 
   def file_name
-    @files_name.map { |name| " #{name}" }
+    @files_name.map { |name| "\s#{name}" }
   end
 
   def convert_file_type(file_type)
