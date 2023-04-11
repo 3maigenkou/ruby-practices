@@ -10,7 +10,7 @@ class OptionL
     end
   end
 
-  # private
+  private
 
   def initialize(files_name)
     @files_name = files_name
