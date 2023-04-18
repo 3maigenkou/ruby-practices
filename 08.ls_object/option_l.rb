@@ -3,6 +3,11 @@
 require 'etc'
 
 class OptionL
+  def initialize(files_name)
+    @files_name = files_name
+    @files_data = files_name.map { |data| File::Stat.new(data) }
+  end
+
   def output
     puts "total #{total}"
     total_data.each do |data|
@@ -11,11 +16,6 @@ class OptionL
   end
 
   private
-
-  def initialize(files_name)
-    @files_name = files_name
-    @files_data = files_name.map { |data| File::Stat.new(data) }
-  end
 
   def total
     @files_data.map(&:blocks).sum
