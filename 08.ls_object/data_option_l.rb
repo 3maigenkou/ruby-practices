@@ -19,7 +19,7 @@ class DataOptionL
       group_name,
       file_size,
       time_stamp,
-      file_name,
+      file_name
     ]
   end
 

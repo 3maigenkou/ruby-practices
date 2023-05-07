@@ -14,5 +14,4 @@ class OptionL
       puts data[0..9].join
     end
   end
-
 end
