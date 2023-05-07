@@ -25,7 +25,7 @@ class FilesData
   def adjust_display
     files = @files_name.dup
     files << nil while (files.size % DISPLAY_NUMBER).positive?
-    files_ljust = files.map { |file| file.to_s.ljust(16) }
+    files_ljust = files.map { |file| file.to_s.ljust(20) }
     files_ljust.each_slice(files.size / DISPLAY_NUMBER).to_a.transpose
   end
 
