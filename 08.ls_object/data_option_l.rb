@@ -87,7 +87,7 @@ class DataOptionL
   end
 
   def time_stamp
-    @file_data.mtime.strftime('%-m %-d %R')
+    @file_data.mtime.strftime('  %-m %-d %R')
   end
 
   def file_name
