@@ -2,6 +2,27 @@
 
 require 'etc'
 
+CONVERT_FILE_TYPE = {
+  fifo: 'p',
+  characterSpecial: 'c',
+  directory: 'd',
+  blockSpecial: 'b',
+  file: '-',
+  link: 'l',
+  socket: 's'
+}.freeze
+
+CONVERT_PERMISSION = {
+  "0": '---',
+  "1": '--x',
+  "2": '-w-',
+  "3": '-wx',
+  "4": 'r--',
+  "5": 'r-x',
+  "6": 'rw-',
+  "7": 'rwx'
+}.freeze
+
 class DataOptionL
   def initialize(file_name)
     @file_name = file_name
@@ -30,8 +51,7 @@ class DataOptionL
   private
 
   def file_type
-    file_type = @file_data.ftype.to_sym
-    convert_file_type(file_type)
+    CONVERT_FILE_TYPE[@file_data.ftype.to_sym]
   end
 
   def file_mode
@@ -39,18 +59,15 @@ class DataOptionL
   end
 
   def file_permission_owner
-    owner_permission_number = file_mode[-3].to_sym
-    convert_permission(owner_permission_number)
+    CONVERT_PERMISSION[file_mode[-3].to_sym]
   end
 
   def file_permission_group
-    group_permission_number = file_mode[-2].to_sym
-    convert_permission(group_permission_number)
+    CONVERT_PERMISSION[file_mode[-2].to_sym]
   end
 
   def file_permission_other
-    other_permission_number = file_mode[-1].to_sym
-    convert_permission(other_permission_number)
+    CONVERT_PERMISSION[file_mode[-1].to_sym]
   end
 
   def file_nlink
@@ -70,35 +87,10 @@ class DataOptionL
   end
 
   def time_stamp
-    @file_data.mtime.strftime('%-m').rjust(3) + @file_data.mtime.strftime('%-d').rjust(3) + @file_data.mtime.strftime('%R').rjust(6)
+    @file_data.mtime.strftime('%-m %-d %R')
   end
 
   def file_name
     "\s#{@file_name}"
-  end
-
-  def convert_file_type(file_type)
-    {
-      fifo: 'p',
-      characterSpecial: 'c',
-      directory: 'd',
-      blockSpecial: 'b',
-      file: '-',
-      link: 'l',
-      socket: 's'
-    }[file_type]
-  end
-
-  def convert_permission(file_permission)
-    {
-      "0": '---',
-      "1": '--x',
-      "2": '-w-',
-      "3": '-wx',
-      "4": 'r--',
-      "5": 'r-x',
-      "6": 'rw-',
-      "7": 'rwx'
-    }[file_permission]
   end
 end

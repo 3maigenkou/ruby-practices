@@ -6,14 +6,14 @@ require_relative 'option_l'
 DISPLAY_NUMBER = 3
 
 class FilesData
-  def initialize
-    @options = ARGV.getopts('a', 'r', 'l')
+  def initialize(options = nil)
+    @options = options.getopts('a', 'r', 'l')
     @files_name = @options['a'] ? Dir.glob('*', File::FNM_DOTMATCH).sort : Dir.glob('*').sort
     @files_name = @files_name.reverse if @options['r']
   end
 
   def self.output
-    new.output
+    new(ARGV).output
   end
 
   def output
