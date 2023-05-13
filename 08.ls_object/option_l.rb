@@ -8,17 +8,14 @@ class OptionL
   end
 
   def output
+    files = @files_data.dup
     puts "total #{blocks_sum}"
-    total_data.each do |data|
-      puts data[0..9].join
+    files.each do |file|
+      puts "#{file.total_data.join}\n"
     end
   end
 
   private
-
-  def total_data
-    @files_data.map(&:total_data)
-  end
 
   def blocks_sum
     @files_data.map(&:file_blocks).sum
