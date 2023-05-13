@@ -8,7 +8,6 @@ class OptionL
   end
 
   def output
-    files = @files_data.dup
     puts "total #{blocks_sum}"
     files.each do |file|
       puts "#{file.total_data.join}\n"
