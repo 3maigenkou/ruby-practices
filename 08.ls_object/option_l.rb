@@ -9,7 +9,7 @@ class OptionL
 
   def output
     puts "total #{blocks_sum}"
-    files.each do |file|
+    @files_data.each do |file|
       puts "#{file.total_data.join}\n"
     end
   end
