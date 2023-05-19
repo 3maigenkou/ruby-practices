@@ -29,6 +29,16 @@ class DataOptionL
     @file_data = File::Stat.new(file_name)
   end
 
+  def long_option_output
+    total_data.join
+  end
+
+  def file_blocks
+    @file_data.blocks
+  end
+
+  private
+
   def total_data
     [
       file_type,
@@ -43,12 +53,6 @@ class DataOptionL
       file_name
     ]
   end
-
-  def file_blocks
-    @file_data.blocks
-  end
-
-  private
 
   def file_type
     CONVERT_FILE_TYPE[@file_data.ftype.to_sym]

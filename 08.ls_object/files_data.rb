@@ -22,7 +22,7 @@ class FilesData
 
   private
 
-  def adjust_display
+  def adjust_display_except_option_l
     files = @files_name.dup
     files << nil while (files.size % DISPLAY_NUMBER).positive?
     files_ljust = files.map { |file| file.to_s.ljust(20) }
@@ -30,6 +30,6 @@ class FilesData
   end
 
   def display_except_option_l
-    puts adjust_display.map(&:join)
+    puts adjust_display_except_option_l.map(&:join)
   end
 end
